@@ -5,6 +5,8 @@ from .get_features import get_features
 from .mimic_training import mimic_training
 from .latching_filter import latching_filter
 from .readWTSfile import readWTSfile
+from .combine_static_KDFs import combine_static_KDFs
+from .readKDFFileLatestPath import readKDFFileLatestPath
 from .initSS import initSS
 from .deka_control_class import DekaControl
 from .deka_test import DekaTest

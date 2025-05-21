@@ -14,9 +14,13 @@ import select
 def load_train_Kalman(SS, RootDir, UDPEvnt=None, ClientAddrList=None):
     if SS['train_kf_phase'] is not None:
         if SS['train_kf_phase'] == 'StartChanSel':
+            
+            
             # grab data from .kdf
-            SS, kin, feat = fd.readKDFFile(SS, RootDir)
-            SS['train_kin'] = kin
+            # SS, kin, feat = fd.readKDFFile(SS, RootDir) # original implementation for one KDF
+            SS, kin, feat = fd.combine_static_KDFs(SS, RootDir)  # Used for multiple KDF training Changed TNT 10/27
+            
+            SS['train_kin'] = kin # add in mirror calibration 
             SS['train_feat'] = feat
             # find channels to be excluded
             SS = fd.find_bad_chans(SS)
@@ -31,7 +35,7 @@ def load_train_Kalman(SS, RootDir, UDPEvnt=None, ClientAddrList=None):
             #                                   SS['num_features'], 
             #                                   SS['chan_sel_queue'],
             #                                   SS['bad_EMG_chans'])
-            ######### end debugging section ################
+            ######### end debugging section ################    
             ctx = mp.get_context('spawn') # type of new process
             SS['chan_sel_queue'] = mp.Queue() # enables communications
             SS['chan_sel_proc'] = mp.Process(target=fd.gramSchmDarpa, 

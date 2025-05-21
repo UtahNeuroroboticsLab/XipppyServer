@@ -9,3 +9,6 @@
 *.elec
 *.pyc
 COB_Python/XipppyClientGUI.asv
+
+# Python cache
+__pycache__/

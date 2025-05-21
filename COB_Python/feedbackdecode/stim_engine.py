@@ -22,10 +22,12 @@ def stim_engine(SS):
     
     # SS['stim_seq'] = [] # list of Ripple's StimSeq class (for each chan)
     SS['StimIdx'] = np.zeros(SS['active_stim'].shape[0], dtype=bool) # which chan to stim on this iteration
+    charge = 0;
+    maxElectrodes = 11;
     for i in range(SS['active_stim'].shape[0]):
-        if i > 11:  #FDA Stimulation Settings
+        if i > maxElectrodes:  #FDA Stimulation Settings
             # print("More than 12 Electrodes")
-            break   #
+            break
         StimChan = SS['active_stim'][i,0]
         
         # set stim values
@@ -35,7 +37,7 @@ def stim_engine(SS):
                 CSF = 255
                 CSA = 0
             else:
-                CSF = 30
+                CSF = SS['active_stim'][i,5]
                 CSA = SS['active_stim'][i,3] # set to min amplitude
         else:
             CSF, CSA = fd.DEKA2StimCOB(SS,i)
@@ -73,17 +75,23 @@ def stim_engine(SS):
                         SS['stim_seq'][i].action = 0 # 'immed'
                     else:
                         # print('curcyc')
-                        SS['stim_seq'][i].action = 0 # 'curcyc'=1 #TODO: keep this 0 for now until production xipppy is released
+                        SS['stim_seq'][i].action = 1 # 'curcyc'=1 #TODO: keep this 0 for now until production xipppy is released
                     
                     # SS['stim_seq'][i].segments[0].length = # fixed at 200 us
                     SS['stim_seq'][i].segments[0].amplitude = int(CSA)
                     # SS['stim_seq'][i].segments[2].length = # fixed at 200 us
                     SS['stim_seq'][i].segments[2].amplitude = int(CSA)
-                    SS['next_pulse'][StimIdx] = SS['cur_time'] + NextPulseDiff + math.floor(30000/CSF) 
-                    SS['StimIdx'][i] = True
+                    SS['next_pulse'][StimIdx] = SS['cur_time'] + NextPulseDiff + math.floor(30000/CSF)
+                    
+                    newCharge = 0.2 * int(CSA) # pulse width in seconds times current in Amps = microAmps
+                    if charge + newCharge < 144:
+                        SS['StimIdx'][i] = True
+                        charge += newCharge
+                    else:
+                        maxElectrodes += 1 # Allow one more electrode since we skipped this electrode
+                        print("over 144 nC! total charge is " + str(charge) + " new charge trying to append is = " + str(newCharge) + " Searching for smaller magnitude pulse")
                     
                     
-    
     if any(SS['StimIdx']):
         try: # could really clean up this try
             true_seqs = []

@@ -1,4 +1,4 @@
-function TrainingKDF2WTS(kdfPath, WTSname)
+    function TrainingKDF2WTS(kdfPath, WTSname)
 % Converts a training file (.kdf) from FeedbackDecode to a WTS file for use
 % with Nomad. 
 % 

@@ -138,4 +138,38 @@ iface wlan0 inet static
 
 
 source /etc/network/interfaces.d/*
+
+
+
+
+## After ripple update, hard drive is read only, must update before updating Xipppy
+cd /tmp
+root@nomad:/tmp# ls
+pip_build_root  xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+root@nomad:/tmp# /usr/rppl/www/bin/pip3 install xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+Processing ./xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+Requirement already satisfied: decorator in /usr/rppl/www/lib/python3.7/site-packages (from xipppy==0.16.2) (4.4.2)
+Requirement already satisfied: numpy in /usr/rppl/www/lib/python3.7/site-packages (from xipppy==0.16.2) (1.19.3)
+Installing collected packages: xipppy
+  Attempting uninstall: xipppy
+    Found existing installation: xipppy 0.15.1
+    Uninstalling xipppy-0.15.1:
+ERROR: Could not install packages due to an EnvironmentError: [Errno 30] Read-only file system: '/usr/rppl/www/lib/python3.7/site-packages/__pycache__/xipppy_capi.cpython-37.pyc'
+
+root@nomad:/tmp# sudo mount -o remount,rw /
+root@nomad:/tmp# /usr/rppl/www/bin/pip3 install xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+Processing ./xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+Requirement already satisfied: numpy in /usr/rppl/www/lib/python3.7/site-packages (from xipppy==0.16.2) (1.19.3)
+Requirement already satisfied: decorator in /usr/rppl/www/lib/python3.7/site-packages (from xipppy==0.16.2) (4.4.2)
+Installing collected packages: xipppy
+  Attempting uninstall: xipppy
+    Found existing installation: xipppy 0.15.1
+    Uninstalling xipppy-0.15.1:
+      Successfully uninstalled xipppy-0.15.1
+Successfully installed xipppy-0.16.2
+root@nomad:/tmp#
 ###########################################################
+
+Prevent Trellis socket 5000 error
+Modify last line of start_Trellis.bat file with the following:
+start .\Trellis.exe -xl 7000
