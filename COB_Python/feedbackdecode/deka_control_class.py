@@ -130,7 +130,8 @@ class DekaControl():
             else: 
                 self.aci_msg['chan3_1'] = 0
                 self.aci_msg['chan3_2'] = self.clip(abs(interp_aci[5]),0,1024)
-            # wrist flexion is velocity mode, have to account for it
+                
+        # wrist flexion is velocity mode, have to account for it
         
         if self.handedness: #left
             if interp_aci[4] >= 0:

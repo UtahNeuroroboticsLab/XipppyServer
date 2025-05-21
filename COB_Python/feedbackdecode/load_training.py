@@ -1,3 +1,6 @@
+# This is not used by any of feedback decode from what I can tell
+# TNT 5/18/22
+
 import numpy as np
 import glob
 import os

@@ -36,12 +36,15 @@ while True:
             xp._close();
     except:
         print('waiting on xipppy...')
-time.sleep(0.5)
+        time.sleep(0.5)
 
 
 ############################ Initialize SS Dict ##############################
+xp.stim_enable_set(False); time.sleep(0.1)
 SS = fd.initSS()
-SS['avail_chans'] = np.array(xp.list_elec())
+SS['avail_chans'] = np.array(xp.list_elec(fe_type='all',max_elecs=1000))
+if SS['all_EMG_chans'][0] not in SS['avail_chans']:
+    print('No EMG detected in Port D')
 
 
 ######################### Create eventparams file ############################
@@ -59,7 +62,6 @@ try:
     SS['VT_ard'] = serial.Serial('/dev/' + usb_id.group(0))
     SS['VT_ard'].baudrate = 250000
     print('Vibrotactile arduino connected')
-    # SS['VT_ard'].close()
 except:
     print('Vibrotactile arduino failed to connect...')
 
@@ -68,14 +70,16 @@ except:
     
 ####### set filters for lfp (only need 1st channel of each frontend) #########
 chan = int(SS['all_EMG_chans'][0])
-xp.signal_set(chan, 'raw', False)#; time.sleep(0.1)
-xp.signal_set(chan, 'hi-res', False)#; time.sleep(0.1)
-xp.signal_set(chan, 'lfp', True)#; time.sleep(0.1)
-xp.filter_set(chan, 'lfp', 3)#; time.sleep(0.1)
+xp.signal_set(chan, 'raw'      , False)#; time.sleep(0.1)
+xp.signal_set(chan, 'hi-res'   , False)#; time.sleep(0.1)
+xp.signal_set(chan, 'lfp'      , True)#; time.sleep(0.1)
+xp.filter_set(chan, 'lfp'      , 3)#; time.sleep(0.1)
 xp.filter_set(chan, 'lfp notch', 2)#; time.sleep(0.1)
+#xp.signal_set(int(chan), 'stim', False) # used for debugging TNT 5/13/22
 for chan in SS['all_EMG_chans']:
     if chan in SS['avail_chans']:
         xp.signal_set(int(chan), 'spk', False)#; time.sleep(0.1) #spk must be set for each channel
+        #xp.signal_set(int(chan), 'stim', False) # do we want to turn this off? TNT 5/13/22
     else:
         print('No EMG detected in Port D')
 
@@ -87,7 +91,7 @@ for chan in SS['neural_FE_idx']:
         xp.signal_set(chan, 'lfp', False)#; time.sleep(0.1)
 for chan in SS['all_neural_chans']:
     if chan in SS['avail_chans']:
-        xp.signal_set(int(chan), 'spk', False)#; time.sleep(0.1)
+        xp.signal_set(int(chan), 'spk', False) #;time.sleep(.1)
         try:
             xp.signal_set(int(chan), 'stim', True)#; time.sleep(0.1)
         except:
@@ -183,20 +187,20 @@ while True:
         break
 
 ############### Make sure xipppy is working! #################################
-while True:
-    try:
-        xp._open()
-        time.sleep(0.5)
-        pre_time = xp.time()
-        time.sleep(0.5)
-        if (xp.time()-pre_time)>10000:
-            print('xipppy successfully connected...')
-            break
-        else:
-            xp._close();
-    except:
-        print('waiting on xipppy...')
-time.sleep(0.5)
+# while True:
+#     try:
+#         xp._open()
+#         time.sleep(0.5)
+#         pre_time = xp.time()
+#         time.sleep(0.5)
+#         if (xp.time()-pre_time)>10000:
+#             print('xipppy successfully connected...')
+#             break
+#         else:
+#             xp._close();
+#     except:
+#         print('waiting on xipppy...')
+# time.sleep(0.5)
 
 
 ################################# VERY LAST ##################################
@@ -218,7 +222,7 @@ while True:
     # getFeat = time.time()
     #################### start mimicry training ##############################
     if SS['train_iter'] is not None:
-        SS = fd.mimic_training(SS)
+        SS = fd.mimic_training(SS, UDPCont)
         
         
     ############## load kdf file and train kalman parameters #################

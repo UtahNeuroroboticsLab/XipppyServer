@@ -19,6 +19,7 @@ Summit System:
 	Start Training
 	Stim STOP Button (Has to be a toggled switch) (stop XipppyServer and turns stim off?)
 	Stop Hand Button
+	Apply training button
 	
 	Automated backup from Nomad to tablet to internet
 	

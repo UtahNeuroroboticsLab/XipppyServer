@@ -1,5 +1,5 @@
  function varargout = XipppyClientGUI(varargin)
-% Last Modified by GUIDE v2.5 29-Mar-2021 11:19:11
+% Last Modified by GUIDE v2.5 11-Nov-2022 11:07:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -306,7 +306,8 @@ end
 
 % --- Executes on button press in StartTraining.
 function StartTraining_Callback(hObject, eventdata, handles)
-handles.XC.write('StartTraining')
+contents = cellstr(get(handles.TrainingTypeDD,'String'));  
+handles.XC.write(contents{get(handles.TrainingTypeDD,'Value')})
 while 1
     if ~isempty(handles.XC.Event)
         break;
@@ -669,3 +670,8 @@ function ManualStimTgl_Callback(hObject, eventdata, handles)
 cmdstr = ['ManualStim:SS[''manual_stim''] = ', ...
     num2str(handles.ManualStimTgl.Value)];
 handles.XC.write(cmdstr)
+
+
+% --- Executes on button press in ReTrainBtn.
+function ReTrainBtn_Callback(hObject, eventdata, handles)
+handles.XC.write('ReTrain')

@@ -17,6 +17,7 @@ import select
 
 def guiCOMM(SS, data, RootDir, UDPEvnt, ClientAddrList): 
     if data[0] == 'StartTraining':
+        
         # load most recent WTS
         list_of_files = glob.glob(RootDir + r'/WTS/*.wts')
         if list_of_files:
@@ -36,13 +37,188 @@ def guiCOMM(SS, data, RootDir, UDPEvnt, ClientAddrList):
             SS['train_fid'] = open(RootDir + r'/training_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
         
         # write header
-        header = np.r_[SS['cur_time'].size, SS['feat'].size, SS['kin'].size].astype('single')
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
         SS['train_fid'].write(header.astype('single'))
         
+    elif data[0] == 'StartTrainingIndividual':
+        print('StartTrainingIndividual' )
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/indvidual_Grasp_Wrist.wts')##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/individual_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/individual_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+        print(SS['train_fid'] )
+  
+    elif data[0] == 'StartTrainingComboRotation': 
+        print('StartTrainingComboRotation' )
+
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/Combo_GraspRot.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/combo_Rotation_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/combo_Rotation_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+        
+        
+    elif data[0] == 'StartTrainingComboFlexExt':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/Combo_GraspFlexExt.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/combo_FlexExt_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/combo_FlexExt_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+    
+    elif data[0] == 'StartTrainingComboKeyGripKDFs':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/KeyGripCombo.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/combo_KeyGrip_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/combo_KeyGrip_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+        
+    elif data[0] == 'StartTrainingComboPinchKDFs':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/Pinch_Combos.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/combo_Pinch_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/combo_Pinch_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))  
+        
+    elif data[0] == 'StartTrainingPinchKDFs':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/Pinch_OpenHand.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/Pinch_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/Pinch_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))  
+        
+    elif data[0] == 'StartTrainingDigitGrips':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/All_Digits.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/individual_DigitGrips_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/individual_DigitGrips_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+        
+    elif data[0] == 'StartTrainingFast':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/5DOF_1Trial.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/training_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/training_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
         
     elif data[0] == 'LoadTraining':
         SS = fd.load_decode_params(SS, RootDir)
         
+    elif data[0] == 'ReTrain':
+        print('Starting ReTrain...')
+        SS['train_kf_phase'] = 'StartChanSel'
         
     elif data[0] == 'UpdateDOF':
         exec(data[1]) # updates 'kin', lock_DOF, mirror_DOF

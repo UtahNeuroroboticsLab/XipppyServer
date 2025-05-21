@@ -57,16 +57,16 @@ def initSS():
     SS['xhat_prev'] = np.zeros((7,1))
     SS['train_kf_phase'] = None # automatically load previous training
     SS['EMG_acq_buff_idx'] = 1
-    SS['wrist_mode'] = 0 # velocity=0, position=1 
+    SS['wrist_mode'] = 1 # velocity=0, position=1 
     SS['lock_DOF'] = np.zeros(7, dtype=bool)
-    SS['stop_hand'] = 1
+    SS['stop_hand'] = 0
     SS['mirror_DOF'] = np.zeros(7, dtype=int)
     SS['chan_sel_queue'] = None # for running channel selection on another core
     SS['chan_sel_proc'] = None # for running channel selection on another core
     SS['train_feat'] = None # populated when reading .kdf for training kalman
     SS['train_kin'] = None # populated when reading .kdf for training kalman
     # SS['gemm'] = get_blas_funcs("gemm", [SS['EMG_diff_matrix'].T, np.zeros([SS['num_EMG_chans'],SS['buf_len_EMG']])])
-    SS['diff_pairs'] = np.zeros([496,33])
+    SS['diff_pairs'] = np.zeros([496,33]) # TODO: 496 is only for 32 EMG chans
     SS['d'] = np.zeros((33, 32))
     print(SS['d'].shape)
     ############################ Encode items ################################
