@@ -1,0 +1,67 @@
+MUST BE USING LINUX (Ubuntu/WSL) OR GIT BASH
+--------------------------------------------
+
+Below is a log of working commands to connect to the Ripple Neuro Bio-Amplifier (tested on a specific Ripple Summit*)
+*Yes, we are aware that it is called Nomad instead of summit on the machine, this itself is not a breaking issue
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1 -hostkey="ssh-rsa 2048 jtkrZLPk6rgLUhL8KWn2aVTBCFP6OxOGpVzRJaE/oAY="
+ssh: unknown option -- h
+usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address]
+           [-c cipher_spec] [-D [bind_address:]port] [-E log_file]
+           [-e escape_char] [-F configfile] [-I pkcs11] [-i identity_file]
+           [-J destination] [-L address] [-l login_name] [-m mac_spec]
+           [-O ctl_cmd] [-o option] [-P tag] [-p port] [-R address]
+           [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]]
+           destination [command [argument ...]]
+       ssh [-Q query_option]
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh root@192.168.42.1
+Unable to negotiate with 192.168.42.1 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ^C
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh -oHostKeyAlgorithms=+ssh-dss root@192.168.42.1
+command-line line 0: Bad key types '+ssh-dss'.
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.42.1
+The authenticity of host '192.168.42.1 (192.168.42.1)' can't be established.
+RSA key fingerprint is SHA256:nYTKUObqiJffmVPkgbmeg//4rjXCLI5YDoQJrGsJ85I.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.42.1' (RSA) to the list of known hosts.
+root@192.168.42.1's password:
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Tue Jun  7 12:34:04 2022 from 192.168.42.129
+root@nomad:/usr/rppl#
+

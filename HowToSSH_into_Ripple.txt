@@ -1,0 +1,34 @@
+--------------------------------------------
+
+- MUST BE USING LINUX (Ubuntu/WSL) OR GIT BASH
+- Below is a log of working commands to connect to the Ripple Neuro Bio-Amplifier (tested on a specific Ripple Summit*)
+*Yes, we are aware that it is called Nomad instead of summit on the machine, this itself is not a breaking issue
+
+- This was tested using Git BASH on windows. You need linux command line features for this to work properly. In theory, wsl
+would also work great: https://learn.microsoft.com/en-us/windows/wsl/install
+
+--------------------------------------------
+
+The command: ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.42.1
+
+Below is a copy of the terminal usage with this command
+--------------------------------------------
+
+UNRBL@ART-RT1 MINGW64 ~
+$ ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.42.1
+The authenticity of host '192.168.42.1 (192.168.42.1)' can't be established.
+RSA key fingerprint is SHA256:nYTKUObqiJffmVPkgbmeg//4rjXCLI5YDoQJrGsJ85I.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.42.1' (RSA) to the list of known hosts.
+root@192.168.42.1's password: root
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Tue Jun  7 12:34:04 2022 from 192.168.42.129
+root@nomad:/usr/rppl#
+

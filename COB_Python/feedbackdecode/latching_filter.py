@@ -18,3 +18,5 @@ def latching_filter(SS, LF_C=1, velIdxs=np.zeros((7,1))):
     SS['xhat_prev'] = SS['xhat'].copy()
     
     return SS
+
+# Propagate both posteriors

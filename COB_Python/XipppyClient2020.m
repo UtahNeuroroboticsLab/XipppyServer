@@ -1,4 +1,4 @@
-classdef XipppyClient < handle
+classdef XipppyClient2020 < handle
     
     % This function communicates with XipppyServer.py running in python
     %
@@ -47,9 +47,10 @@ classdef XipppyClient < handle
         function init(obj,varargin)
             delete(instrfindall);
             
-            obj.UDP = udp(obj.ServerAddr,20001,'localhost',obj.ClientAddr,'localport',20002,'DatagramReceivedFcn',@obj.read,'TimerFcn',@obj.getTime,'TimerPeriod',0.1); 
+%             obj.UDP = udp(obj.ServerAddr,20001,'localhost',obj.ClientAddr,'localport',20002,'DatagramReceivedFcn',@obj.read,'TimerFcn',@obj.getTime,'TimerPeriod',0.1); 
+            obj.UDP = udpport("datagram","IPV4",'localhost',obj.ClientAddr,'localport',20002);
             obj.UDP.InputBufferSize = 65535; obj.UDP.InputDatagramPacketSize = 13107; obj.UDP.OutputBufferSize = 65535; obj.UDP.OutputDatagramPacketSize = 13107;
-            fopen(obj.UDP); pause(1);
+
             
             flushinput(obj.UDP); pause(0.1);
             flushoutput(obj.UDP); pause(0.1);
