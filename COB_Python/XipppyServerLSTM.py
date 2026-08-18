@@ -11,7 +11,6 @@ import time
 import xipppy as xp
 import select
 import numpy as np
-import logging
 
 ################ Only runs on Nomad ##########################
 RootDir = r'/var/rppl/storage'
@@ -22,8 +21,6 @@ ServerAddrWifi = "192.168.43.1"
 ClientAddrDEKA = 'localhost'
 ServerAddrDEKA = 'localhost'
 
-############################ Initialize SS Dict ##############################
-SS = fd.initSS()
 
 ############################## Initialize XippPy #############################
 while True:
@@ -33,21 +30,21 @@ while True:
         pre_time = xp.time()
         time.sleep(0.5)
         if (xp.time()-pre_time)>10000:
-            SS['logger'].info('xipppy successfully connected... ' + time.strftime('%H%M%S'))
+            print('xipppy successfully connected...')
             break
         else:
             xp._close();
     except:
-        SS['logger'].info('waiting on xipppy... ' + time.strftime('%H%M%S'))
+        print('waiting on xipppy...')
         time.sleep(0.5)
 
-# disable stim
-xp.stim_enable_set(False); time.sleep(0.1)
 
-# Check for port D
+############################ Initialize SS Dict ##############################
+xp.stim_enable_set(False); time.sleep(0.1)
+SS = fd.initSS()
 SS['avail_chans'] = np.array(xp.list_elec(fe_type='all',max_elecs=1000))
 if SS['all_EMG_chans'][0] not in SS['avail_chans']:
-    SS['logger'].info('No EMG detected in Port D')
+    print('No EMG detected in Port D')
 
 
 ######################### Create eventparams file ############################
@@ -64,9 +61,9 @@ try:
     
     SS['VT_ard'] = serial.Serial('/dev/' + usb_id.group(0))
     SS['VT_ard'].baudrate = 250000
-    SS['logger'].info('Vibrotactile arduino connected ' + time.strftime('%H%M%S'))
+    print('Vibrotactile arduino connected')
 except:
-    SS['logger'].info('Vibrotactile arduino failed to connect... ' + time.strftime('%H%M%S'))
+    print('Vibrotactile arduino failed to connect...')
 
 
     
@@ -84,7 +81,7 @@ for chan in SS['all_EMG_chans']:
         xp.signal_set(int(chan), 'spk', False)#; time.sleep(0.1) #spk must be set for each channel
         #xp.signal_set(int(chan), 'stim', False) # do we want to turn this off? TNT 5/13/22
     else:
-        SS['logger'].info('No EMG detected in Port D... ' + time.strftime('%H%M%S'))
+        print('No EMG detected in Port D')
 
 ################# Try to turn off streams we don't need ######################
 for chan in SS['neural_FE_idx']:
@@ -98,17 +95,13 @@ for chan in SS['all_neural_chans']:
         try:
             xp.signal_set(int(chan), 'stim', True)#; time.sleep(0.1)
         except:
-            SS['logger'].info('Not a +stim front end. Chan:', chan) 
+            print('Not a +stim front end. Chan:', chan) 
     
 ########################### enable stim ######################################
 xp.stim_enable_set(True)#; time.sleep(0.1)
 time.sleep(0.1)
-while not xp.stim_enable(): # returns true if stim was enabled correctly
-    SS['logger'].info('Stim not correctly enabled in initialization... ' + time.strftime('%H%M%S'))
-    xp.stim_enable_set(True)
-    time.sleep(0.1)
-
-SS['logger'].info('Stimulation correctly initialized... ' + time.strftime('%H%M%S'))
+if not xp.stim_enable(): # returns true if stim was enabled correctly
+    print('Stim not correctly enabled in initialization')
 if sum(np.in1d(np.arange(6), SS['avail_chans'])) == 0: # if we don't have electrical stim channels
     SS['avail_chans'] = np.hstack((SS['avail_chans'], np.arange(6))) # add VTstim channels
 
@@ -185,6 +178,21 @@ SS = fd.load_bad_elecs(SS, RootDir)
 ########### Load most recent decode overrides (locked DOFs, etc) #############
 SS = fd.load_decode_overrides(SS, RootDir)
 
+###################### Load LSTM model if LSTM is true ######################
+SS["LSTM"] = True
+
+# Keep this True because the controller expects commands from -1 to +1.
+SS["lstm_clip_output"] = True
+SS["lstm_model_path"] = "/usr/rppl/TNT3_model_float32.tflite"
+if SS["LSTM"]:
+    SS['num_features'] = int(496)
+    SS["lstm_model_path"] = "/usr/rppl/COB_model_float32.tflite"
+    SS = fd.init_lstm_tflite(
+        SS,
+        model_path=SS["lstm_model_path"],
+        num_threads=1
+    )
+
 
 ###### flush deka_server buffer to prevent any delays with transmission ######
 while True:
@@ -225,36 +233,39 @@ while True:
     ############### DO NOT PLACE CODE ABOVE THIS #############################
     ####### calc curTime/preTime/elapsedTime and get new EMG #################
     SS = fd.get_features(SS) # this returns diff pairs
+    if SS['LSTM']:
     
-    # getFeat = time.time()
-    #################### start mimicry training ##############################
-    if SS['train_iter'] is not None:
-        SS = fd.mimic_training(SS, UDPCont)
+        SS = fd.lstm_test_cob(SS)
+        
+    else:
+
+        # getFeat = time.time()
+        #################### start mimicry training ##############################
+        if SS['train_iter'] is not None:
+            SS = fd.mimic_training(SS, UDPCont)
+            
+            
+        ############## load kdf file and train kalman parameters #################
+        SS = fd.load_train_Kalman(SS, RootDir, UDPEvnt, ClientAddrList) # sends event to GUI when training complete
+            
+
+        ######################### Kalman prediction ##############################
+        SS = fd.kf_test_cob(SS) # modifies xhat_raw and should not be changed hereafter
         
         
-    ############## load kdf file and train kalman parameters #################
-    SS = fd.load_train_Kalman(SS, RootDir, UDPEvnt, ClientAddrList) # sends event to GUI when training complete
-           
+        ############################ Threshold ###################################
+        SS = fd.decode_threshold(SS) # modifies xhat
 
-    ######################### Kalman prediction ##############################
-    SS = fd.kf_test_cob(SS) # modifies xhat_raw and should not be changed hereafter
-    
-    
-    ############################ Threshold ###################################
-    SS = fd.decode_threshold(SS) # modifies xhat
-
-    
     ########################### latch filter #################################
     SS = fd.latching_filter(SS) # modifies xhat and xhat_prev  
-    
-    
+
     ############################ locked DOFs #################################
     SS = fd.lock_DOFs(SS) # modifies xhat
-    
+
     
     ######################## Tie DOFs together ###############################
     SS = fd.tie_DOFs(SS) # modified xhat
-    
+
     # getDecode = time.time()
     ############# send to/receive from DekaControl() from deka_control_class.py ###########
     if SS['train_iter'] is not None: # if doing mimic training, send kinematics to deka
@@ -311,7 +322,7 @@ while True:
         # print(SS['calc_time'], '276 - calc', SS['elapsed_time'], '276 - elapsed')
         pdata = struct.pack('<81f',*np.hstack((SS['elapsed_time'],
                                                SS['calc_time'],
-                                               SS['feat'][SS['sel_feat_idx']],
+                                               SS['feat'][0:48],
                                                SS['kin'][:6],
                                                SS['xhat'][:6].flatten(),
                                                SS['cur_sensors'])))
@@ -333,7 +344,7 @@ while True:
         SS['eventparams_fid'].write(data + "; SS['cur_time'] = " + 
                                     str(SS['cur_time']) + ';\n')
         data = data.split(':',1)
-        SS['logger'].info(data)
+        print(data)
     
     
     ######################## GUI event parsing ###############################

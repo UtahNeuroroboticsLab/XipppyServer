@@ -13,7 +13,7 @@ def load_stim_params(SS, RootDir):
         print('No stim params (.sp) available to load')
         return SS
 
-    # load
+    # load latest_file = "stimparams_20260406-125548.sp"
     stimparamFID = open(latest_file, 'br', buffering=0)
     params_contents = np.fromfile(stimparamFID, dtype='single')
     stimparamFID.close()

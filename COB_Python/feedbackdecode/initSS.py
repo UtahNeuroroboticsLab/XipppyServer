@@ -3,6 +3,8 @@ import numpy as np
 import feedbackdecode as fd
 import xipppy as xp
 import copy
+import time
+import logging
 # from scipy.linalg import get_blas_funcs
 
 def initSS():
@@ -20,7 +22,11 @@ def initSS():
     SS['prev_time'] = int(0) # previous time in loop
     SS['calc_time'] = np.single(0) # time for calculations in loop
     SS['elapsed_time'] = np.single(0) # time between loop cycles
-    
+
+    ########################## Debugging & Logging ###########################
+    SS['logger'] = logging.getLogger(__name__)
+    logging.basicConfig(filename = '/var/rppl/storage/logs/XipppyServerLog.log', level = logging.INFO)
+    SS['logger'].info('Started XipppyServer.py at ' + time.strftime('%Y%m%d-%H%M%S'))
     
     ################## General File I/O, System setup ########################
     SS['eventparams_fid'] = None
@@ -34,11 +40,13 @@ def initSS():
     # kinematic order: thumb, ind, mrp, thumbint, wristfe, wristrot
     SS['num_EMG_chans'] = int(32) # number of EMG channels
     SS['EMG_diff_matrix'], SS['EMG_chan_pairs'] = fd.genEMGDiffMatrix_simple(SS['num_EMG_chans'])
+    SS["matlab_feature_order"] = fd.make_matlab_feature_order()
+    print (SS["matlab_feature_order"])
     SS['bad_EMG_elecs'] = np.array([], dtype=int) # electrodes themselves
     # SS['bad_EMG_elecs'] = np.arange(20) # electrodes themselves
     SS['bad_EMG_chans'] = np.array([]) # which channels (from EMG_diff_matrix) should be excluded. Calculated in fd.find_bad_chans
     SS['num_diff_pairs'] = int(SS['EMG_diff_matrix'].shape[0]) # number of differentials
-    SS['num_features'] = int(48) # channels to use after channel selection
+    SS['num_features'] = int(496) # channels to use after channel selection
     SS['buf_len_EMG'] = int(33) # number of samples for moving average (1 kHz)
     SS['prev_EMG_buff'] = np.zeros((SS['num_diff_pairs'],297), dtype=np.single)  #Holds the values of all the previous 
     SS['all_EMG_chans'] = np.arange(384, 384+SS['num_EMG_chans'], dtype=int) # Port C: 256, Port D: 384
@@ -80,6 +88,9 @@ def initSS():
     SS['stop_stim'] = 1
     SS['active_stim'] = np.array([]).reshape((0,7)) # just needs the first 7 parameters from 'stim_params'
     SS['stim_params'] = np.array([]).reshape((0,9)) # this is the default. Below for testing.
+    SS["lstm_model_path"] = "/usr/rppl/TNT3_model_float32.tflite" #"/var/rppl/storage/tflite_models"
+    print( SS["lstm_model_path"] )
+    SS["lstm_feature_count"] = 0
     # SS['stim_params'] = np.array([1,0,3,0,10,0,100,0,1]) 
     # SS['stim_params'] = np.array([[223,2,3,30,30,0,300,1,1],
     #                               [1,1,3,0,10,0,300,1,1],

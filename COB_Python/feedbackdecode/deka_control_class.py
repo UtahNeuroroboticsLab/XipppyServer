@@ -61,9 +61,15 @@ class DekaControl():
         
         # below are values for interpolating kinematics to aci messages
         # thumb, ind, mrp, thumbint, wrist fe, wrist rot
+
+        # Edit 7/10/2026 --> 
+        # ~LMF
+        # Altering values for the wrist alters max velocity.
+        # Altering from 1024 to 768 for wrist rotation velocity
+        # Wrist rotation is controlled by the last two indicies
         self.rest_pos_aci = np.array([225,  400, 350,  900,    0,    0], dtype=np.int16) 
-        self.min_pos_aci  = np.array([  0,    0,   0,  500, 1024, 1024], dtype=np.int16)
-        self.max_pos_aci  = np.array([450, 1024, 950, 1024, 1024, 1024], dtype=np.int16)
+        self.min_pos_aci  = np.array([  0,    0,   0,  500, 768, 768], dtype=np.int16)
+        self.max_pos_aci  = np.array([450, 1024, 950, 1024, 768, 768], dtype=np.int16)
         
         #Min/max from DEKA manual (actual values provided in min_pos_sens and max_pos_sens)
         #thumb: 0->5760

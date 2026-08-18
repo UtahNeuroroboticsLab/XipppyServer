@@ -2,6 +2,7 @@
 import glob
 import numpy as np
 import os
+import logging
 
 def load_decode_params(SS, RootDir):
     if SS['num_EMG_chans'] == 16:
