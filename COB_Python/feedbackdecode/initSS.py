@@ -3,6 +3,8 @@ import numpy as np
 import feedbackdecode as fd
 import xipppy as xp
 import copy
+import time
+import logging
 # from scipy.linalg import get_blas_funcs
 
 def initSS():
@@ -20,7 +22,11 @@ def initSS():
     SS['prev_time'] = int(0) # previous time in loop
     SS['calc_time'] = np.single(0) # time for calculations in loop
     SS['elapsed_time'] = np.single(0) # time between loop cycles
-    
+
+    ########################## Debugging & Logging ###########################
+    SS['logger'] = logging.getLogger(__name__)
+    logging.basicConfig(filename = '/var/rppl/storage/logs/XipppyServerLog.log', level = logging.INFO)
+    SS['logger'].info('Started XipppyServer.py at ' + time.strftime('%Y%m%d-%H%M%S'))
     
     ################## General File I/O, System setup ########################
     SS['eventparams_fid'] = None
