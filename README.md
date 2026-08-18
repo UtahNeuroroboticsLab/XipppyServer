@@ -1,6 +1,8 @@
 # XipppyServer
- Software for take-home trial with advanced neuromyoelectric prosthesis
+- Software for take-home trial with advanced neuromyoelectric prosthesis
 
+The actual code that runs on the Ripple machine is located in `COB_Python/`.
+- COB stands for *Code On the Box*. It is a terminology Ripple Neuro came up with :)
 
 ### Nommad Login info
 
