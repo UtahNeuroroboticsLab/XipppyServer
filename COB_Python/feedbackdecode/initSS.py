@@ -7,6 +7,8 @@ import time
 import logging
 # from scipy.linalg import get_blas_funcs
 
+log = logging.getLogger(__name__) # handlers/format configured by XipppyServer.py
+
 def initSS():
     ''' 
     This function defines all fields of SS dict before it is read or used.
@@ -24,10 +26,15 @@ def initSS():
     SS['elapsed_time'] = np.single(0) # time between loop cycles
 
     ########################## Debugging & Logging ###########################
-    SS['logger'] = logging.getLogger(__name__)
-    logging.basicConfig(filename = '/var/rppl/storage/logs/XipppyServerLog.log', level = logging.INFO)
-    SS['logger'].info('Started XipppyServer.py at ' + time.strftime('%Y%m%d-%H%M%S'))
+    # XipppyLog is now started from XipppyServer
+
+    # SS['logger'] = logging.getLogger(__name__)
+    # logging.basicConfig(filename = '/var/rppl/storage/logs/XipppyServerLog.log', level = logging.INFO)
+    # SS['logger'].info('Started XipppyServer.py at ' + time.strftime('%Y%m%d-%H%M%S'))
     
+    # logging is now configured once in XipppyServer.py; log via the module-level `log` above
+    log.info('building SS dict')
+
     ################## General File I/O, System setup ########################
     SS['eventparams_fid'] = None
     SS['eyn_fid'] = None
@@ -74,7 +81,8 @@ def initSS():
     # SS['gemm'] = get_blas_funcs("gemm", [SS['EMG_diff_matrix'].T, np.zeros([SS['num_EMG_chans'],SS['buf_len_EMG']])])
     SS['diff_pairs'] = np.zeros([496,33]) # TODO: 496 is only for 32 EMG chans
     SS['d'] = np.zeros((33, 32))
-    print(SS['d'].shape)
+    # print(SS['d'])
+    log.debug("SS['d'] shape: %s", SS['d'].shape)
     ############################ Encode items ################################
     SS['manual_stim'] = 0
     SS['cur_sensors'] = np.zeros(19, dtype=np.single) # 19 sensors from deka

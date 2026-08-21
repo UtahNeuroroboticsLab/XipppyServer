@@ -24,6 +24,24 @@ ClientAddrDEKA = 'localhost'
 ServerAddrDEKA = 'localhost'
 
 
+########################### Configure logging ################################
+# Configure once, here at the entrypoint. Every other module just does
+# `log = logging.getLogger(__name__)` so records name whoever emitted them.
+LOG_PATH = RootDir + r'/logs/XipppyServerLog.log'
+
+# log is opened append-mode, so banner each restart to keep sessions separable
+with open(LOG_PATH, 'a') as f:
+    f.write('\n' + '#'*78 + '\n'
+            + '### XipppyServer start ' + time.strftime('%m:%d:%H:%M:%S') + '\n'
+            + '#'*78 + '\n')
+
+logging.basicConfig(filename = LOG_PATH,
+                    level    = logging.DEBUG,
+                    format   = '%(asctime)s.%(msecs)03d [%(levelname)s] %(name)s: %(message)s',
+                    datefmt  = '%Y-%m-%d %H:%M:%S')
+log = logging.getLogger('XipppyServer') # __name__ is '__main__' when run directly
+log.info('Started XipppyServer.py')
+
 ############################ Initialize SS Dict ##############################
 SS = fd.initSS()
 
@@ -35,12 +53,14 @@ while True:
         pre_time = xp.time()
         time.sleep(0.5)
         if (xp.time()-pre_time)>10000:
-            SS['logger'].info('xipppy successfully connected... ' + time.strftime('%H%M%S'))
+            # SS['logger'].info('xipppy successfully connected... ' + time.strftime('%H%M%S'))
+            log.info('xipppy successfully connected')
             break
         else:
             xp._close();
     except:
-        SS['logger'].info('waiting on xipppy... ' + time.strftime('%H%M%S'))
+        # SS['logger'].info('waiting on xipppy... ' + time.strftime('%H%M%S'))
+        log.info('waiting on xipppy...')
         time.sleep(0.5)
 
 # disable stim
@@ -49,7 +69,8 @@ xp.stim_enable_set(False); time.sleep(0.1)
 # Check for port D
 SS['avail_chans'] = np.array(xp.list_elec(fe_type='all',max_elecs=1000))
 if SS['all_EMG_chans'][0] not in SS['avail_chans']:
-    SS['logger'].info('No EMG detected in Port D')
+    # SS['logger'].info('No EMG detected in Port D')
+    log.info('No EMG detected in Port D')
 
 
 ######################### Create eventparams file ############################
@@ -66,9 +87,11 @@ try:
     
     SS['VT_ard'] = serial.Serial('/dev/' + usb_id.group(0))
     SS['VT_ard'].baudrate = 250000
-    SS['logger'].info('Vibrotactile arduino connected ' + time.strftime('%H%M%S'))
+    # SS['logger'].info('Vibrotactile arduino connected ' + time.strftime('%H%M%S'))
+    log.info('Vibrotactile arduino connected')
 except:
-    SS['logger'].info('Vibrotactile arduino failed to connect... ' + time.strftime('%H%M%S'))
+    # SS['logger'].info('Vibrotactile arduino failed to connect... ' + time.strftime('%H%M%S'))
+    log.info('Vibrotactile arduino failed to connect...')
 
 
     
@@ -86,7 +109,8 @@ for chan in SS['all_EMG_chans']:
         xp.signal_set(int(chan), 'spk', False)#; time.sleep(0.1) #spk must be set for each channel
         #xp.signal_set(int(chan), 'stim', False) # do we want to turn this off? TNT 5/13/22
     else:
-        SS['logger'].info('No EMG detected in Port D... ' + time.strftime('%H%M%S'))
+        # SS['logger'].info('No EMG detected in Port D... ' + time.strftime('%H%M%S'))
+        log.info('No EMG detected in Port D...')
 
 ################# Try to turn off streams we don't need ######################
 for chan in SS['neural_FE_idx']:
@@ -100,17 +124,20 @@ for chan in SS['all_neural_chans']:
         try:
             xp.signal_set(int(chan), 'stim', True)#; time.sleep(0.1)
         except:
-            SS['logger'].info('Not a +stim front end. Chan:', chan) 
+            # SS['logger'].info('Not a +stim front end. Chan:', chan) # bug: no %s, chan was swallowed
+            log.info('Not a +stim front end. Chan: %s', chan)
     
 ########################### enable stim ######################################
 xp.stim_enable_set(True)#; time.sleep(0.1)
 time.sleep(0.1)
 while not xp.stim_enable(): # returns true if stim was enabled correctly
-    SS['logger'].info('Stim not correctly enabled in initialization... ' + time.strftime('%H%M%S'))
+    # SS['logger'].info('Stim not correctly enabled in initialization... ' + time.strftime('%H%M%S'))
+    log.info('Stim not correctly enabled in initialization...')
     xp.stim_enable_set(True)
     time.sleep(0.5)
 
-SS['logger'].info('Stimulation correctly initialized... ' + time.strftime('%H%M%S'))
+# SS['logger'].info('Stimulation correctly initialized... ' + time.strftime('%H%M%S'))
+log.info('Stimulation correctly initialized...')
 if sum(np.in1d(np.arange(6), SS['avail_chans'])) == 0: # if we don't have electrical stim channels
     SS['avail_chans'] = np.hstack((SS['avail_chans'], np.arange(6))) # add VTstim channels
 
@@ -223,7 +250,8 @@ SS['eventparams_fid'].write(fd.SS_to_string(SS) + '\n')
 ########################## Loop starts here ##################################
 ##############################################################################
 
-SS['logger'].info('Entering run time loop... ' + time.strftime('%H%M%S'))
+# SS['logger'].info('Entering run time loop... ' + time.strftime('%H%M%S'))
+log.info('Entering run time loop...')
 
 while True:
     # begLoop = time.time()
