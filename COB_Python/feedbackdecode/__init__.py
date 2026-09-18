@@ -32,3 +32,6 @@ from .XS_close import XS_close
 from .save_decode_overrides import save_decode_overrides
 from .load_decode_overrides import load_decode_overrides
 from .clip import clip
+from .init_lstm_tflite import init_lstm_tflite
+from .lstm_test_cob import lstm_test_cob
+from .make_matlab_feature_order import make_matlab_feature_order

@@ -62,9 +62,27 @@ def get_features(SS):
         
     # mLFP = np.single(np.mean(np.abs(d),axis=1))
     # SS['feat'] = np.single(np.mean(np.abs(diff_pairs),axis=1))
-    SS['feat'] = np.single(np.mean(abs(SS['prev_EMG_buff']),axis=1))
+    if SS["lstm_feature_count"] == 528:
     
-    # endLoop = time.time()
-    
+        single_ended_mean = np.mean(SS['d'][:32, :], axis=1) #grab the single ended pairs for the LSTM
+        SS['feat'] = np.single(np.mean(abs(SS['prev_EMG_buff']),axis=1))
+        
+        SS['feat'] = np.concatenate((
+        single_ended_mean,
+        np.asarray(SS['feat']).reshape(-1)
+        ))
+        
+        if SS['feat'].size != 528:
+            raise ValueError(
+            f"Expected 528 features, got {SS['feat'].size}"
+        )
+        
+        # Move the complete array into MATLAB ordering
+        SS['feat'] = SS['feat'][SS["matlab_feature_order"]]
+        # endLoop = time.time()
+        SS['sel_feat_idx'] = np.arange(SS['num_features'], dtype=int) # Channel selected features
+        
+    if SS["lstm_feature_count"] < 528:
+        SS['feat'] = np.single(np.mean(abs(SS['prev_EMG_buff']),axis=1))
     # print(f'diffpairs: {buffTime - diffpairs:.4f}, buffTime: {preFeat - buffTime:.4f}, preFeat: {endLoop - preFeat:.4f}')
     return SS

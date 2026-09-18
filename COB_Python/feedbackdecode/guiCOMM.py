@@ -191,6 +191,48 @@ def guiCOMM(SS, data, RootDir, UDPEvnt, ClientAddrList):
         # write header
         header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
         SS['train_fid'].write(header.astype('single'))
+
+    elif data[0] == 'StartTrainingHook':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/HookGrasp.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/hook_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/hook_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
+
+    elif data[0] == 'StartTrainingThumb':
+        # load WTS
+        try:
+            SS['train_seq'], _ = fd.readWTSfile(RootDir + r'/WTS/FlatPalmThumbGrasp.wts') ##TODO: put in actual WTS Name here
+        except:
+            print('No WTS file available.')
+        
+        # get file saving and train_iter started
+        SS['train_iter'] = 0
+        timestr = time.strftime('%Y%m%d-%H%M%S')
+        
+        if SS['num_EMG_chans'] == 16:
+            SS['train_fid'] = open(RootDir + r'/combo_flatPalmThumb_KDFs/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+            
+        elif SS['num_EMG_chans'] == 32:
+            SS['train_fid'] = open(RootDir + r'/combo_flatPalmThumb_KDFs32/trainKDF_' + timestr + r'.kdf', 'wb') # nomad directory
+        
+        # write header
+        header = np.r_[np.size(SS['cur_time']), SS['feat'].size, SS['kin'].size].astype('single')
+        SS['train_fid'].write(header.astype('single'))
         
     elif data[0] == 'StartTrainingFast':
         # load WTS
@@ -256,6 +298,7 @@ def guiCOMM(SS, data, RootDir, UDPEvnt, ClientAddrList):
 
     elif data[0] == 'StopStim':
         exec(data[1]) # updates SS['stop_stim'] toggle
+        time.sleep(0.1)
 
 
     elif data[0] == 'StopHand':

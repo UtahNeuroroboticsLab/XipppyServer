@@ -1,0 +1,6 @@
+#!/bin/bash
+# This will be a litte easier under pressure.
+export PATH=$PATH:/usr/rppl:/usr/sbin:/usr/local/bin
+service hostapd start
+service udhcpd start
+setled -w on

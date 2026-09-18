@@ -23,5 +23,3 @@ def decode_threshold(SS):
     dynidx = np.logical_or(np.logical_and(SS['xhat']>restPos, ~pos), np.logical_and(SS['xhat']<restPos, pos))
     SS['xhat'][dynidx] = restPos[dynidx]
     return SS
-
-

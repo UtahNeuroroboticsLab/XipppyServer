@@ -1,0 +1,268 @@
+INFO:__main__:Started XipppyServer.py at 20260728-141325
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Started XipppyServer.py at 20260728-144125
+DEBUG:xipppy:Opening xipppy
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Started XipppyServer.py at 20260728-144701
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:waiting on xipppy...
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Vibrotactile arduino failed to connect...
+INFO:__main__:Stimulation correctly initialized
+INFO:__main__:Started XipppyServer.py at 20260728-171636
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:waiting on xipppy...
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Vibrotactile arduino failed to connect...
+INFO:__main__:Stimulation correctly initialized
+INFO:__main__:Started XipppyServer.py at 20260729-111535
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:waiting on xipppy...
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Started XipppyServer.py at 20260729-120144
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:waiting on xipppy...
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:__main__:Started XipppyServer.py at 20260729-162401
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:waiting on xipppy...
+DEBUG:xipppy:Opening xipppy
+INFO:__main__:xipppy successfully connected...
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260729-165226
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 165227
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:EMG confirmed in Port D... 165227
+INFO:feedbackdecode.initSS:Stimulation correctly initialized
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260729-165734
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 165735
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 165737
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 165738
+INFO:feedbackdecode.initSS:Stimulation correctly initialized
+INFO:feedbackdecode.initSS:['TimeUpdate', '29 Jul 2026 17:15:15']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['UpdateStimParams', "SS['stim_params'] = np.array([[1,1,1,1,1,10,10,1,1],])"]
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 0"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 0"]
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260729-171931
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 171932
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 171935
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 171935
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 171935
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 1"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 0"]
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 0"]
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260729-172729
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 172731
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 172731
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 172731
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 0"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 1"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 0"]
+INFO:feedbackdecode.initSS:['UpdateStimParams', "SS['stim_params'] = np.array([[1,1,1,1,1,10,10,1,1],])"]
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 0"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 0"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 1"]
+INFO:feedbackdecode.initSS:['ManualStim', "SS['manual_stim'] = 1"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 0"]
+INFO:feedbackdecode.initSS:['StopStim', "SS['stop_stim'] = 1"]
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260730-111215
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 111216
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 111219
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 111219
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260731-160945
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 160946
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 160949
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 160949
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260804-160015
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 160016
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 160019
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 160019
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260806-110638
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 110639
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 110642
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 110642
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260807-091454
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 091456
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 091458
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 091458
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260807-102424
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 102425
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 102427
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 102427
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260807-123050
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 123051
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 123053
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 123053
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260810-140733
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 140734
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 140736
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 140736
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260811-111227
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 111228
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 111230
+INFO:feedbackdecode.initSS:No EMG detected in Port D
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 111230
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-095409
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:waiting on xipppy... 095410
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 095412
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 095412
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 095412
+INFO:feedbackdecode.initSS:['TimeUpdate', '12 Aug 2026 09:56:31']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['GetStimParams']
+INFO:feedbackdecode.initSS:['UpdateUserStimParams', "SS['stim_params'][np.ix_(SS['stim_params'][:,7]==1, [3,4,8])] = np.array([[1,1,1],])"]
+INFO:feedbackdecode.initSS:['UpdateDOF', "SS['kin'] = np.array([0.5,0.3,0.2,0,0.8,-0.2,0],dtype=np.single);SS['lock_DOF'] = np.array([0,0,0,1,1,1,0],dtype=bool);SS['mirror_DOF'] = np.array([0,0,0,0,0,0,0],dtype=int);"]
+INFO:feedbackdecode.initSS:['UpdateDOF', "SS['kin'] = np.array([0.5,0.3,0.2,0.5,0.8,-0.2,0],dtype=np.single);SS['lock_DOF'] = np.array([0,0,0,1,1,1,0],dtype=bool);SS['mirror_DOF'] = np.array([0,0,0,0,0,0,0],dtype=int);"]
+INFO:feedbackdecode.initSS:['TimeUpdate', '12 Aug 2026 09:59:10']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['TimeUpdate', '12 Aug 2026 10:01:09']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['StartTrainingIndividual']
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-100958
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 100959
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 100959
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 101000
+INFO:feedbackdecode.initSS:['TimeUpdate', '12 Aug 2026 10:10:36']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:['TimeUpdate', '12 Aug 2026 10:17:03']
+INFO:feedbackdecode.initSS:['GetNomadParams']
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-101939
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-101958
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 101959
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 101959
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 101959
+INFO:feedbackdecode.initSS:['close']
+DEBUG:xipppy:_close called, setting user count to 0
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-102601
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 102602
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 102603
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 102603
+INFO:feedbackdecode.initSS:['StartTrainingIndividual']
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-102958
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 102959
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 102959
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 102959
+INFO:feedbackdecode.initSS:['StartTrainingIndividual']
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-103810
+DEBUG:xipppy:Opening xipppy
+INFO:feedbackdecode.initSS:xipppy successfully connected... 103811
+INFO:feedbackdecode.initSS:Vibrotactile arduino failed to connect... 103811
+INFO:feedbackdecode.initSS:Stimulation correctly initialized... 103812
+INFO:feedbackdecode.initSS:['StartTrainingIndividual']
+INFO:feedbackdecode.initSS:['StartTrainingIndividual']
+INFO:feedbackdecode.initSS:['close']
+DEBUG:xipppy:_close called, setting user count to 0
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-110251
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-110423
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-110521
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-111034
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-111115
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-111249
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-111450
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112036
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112114
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112228
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112305
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112341
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112425
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112501
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-112641
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113017
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113113
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113131
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113232
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113303
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113323
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113409
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113540
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113633
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113752
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113831
+INFO:feedbackdecode.initSS:Started XipppyServer.py at 20260812-113933

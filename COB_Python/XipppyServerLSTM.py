@@ -3,7 +3,6 @@ import feedbackdecode as fd
 # import multiprocessing as mp
 import serial # pySerial for vibrotactile stim
 import re # used to search for attached usb devices
-import os
 import socket
 import struct
 import subprocess
@@ -12,44 +11,16 @@ import time
 import xipppy as xp
 import select
 import numpy as np
-import logging
-
 
 ################ Only runs on Nomad ##########################
 RootDir = r'/var/rppl/storage'
-ClientAddr = "192.168.42.129" 
-ServerAddr = "192.168.42.1" 
+ClientAddr = "192.168.42.129"
+ServerAddr = "192.168.42.1"
 ClientAddrWifi = "192.168.43.129"
-ServerAddrWifi = "192.168.43.1" 
+ServerAddrWifi = "192.168.43.1"
 ClientAddrDEKA = 'localhost'
 ServerAddrDEKA = 'localhost'
 
-############################ Initialize SS Dict ##############################
-SS = fd.initSS()
-
-########################### Configure logging ################################
-# Configure once, here at the entrypoint. Every other module just does
-# `log = logging.getLogger(__name__)` so records name whoever emitted them.
-LOG_PATH = RootDir + r'/logs/XipppyServerLog.log'
-if not os.path.isdir(RootDir):
-    raise RuntimeError(RootDir + ' not found - is this running on the Nomad?')
-os.makedirs(RootDir + r'/logs', exist_ok=True)
-
-# log is opened append-mode, so banner each restart to keep sessions separable
-with open(LOG_PATH, 'a') as f:
-    f.write('\n' + '#'*78 + '\n'
-            + '### XipppyServer start ' + time.strftime('%m:%d:%H:%M:%S') + '\n'
-            + '#'*78 + '\n')
-
-logging.basicConfig(filename = LOG_PATH,
-                    level    = logging.DEBUG,
-                    format   = '%(asctime)s.%(msecs)03d [%(levelname)s] %(name)s: %(message)s',
-                    datefmt  = '%Y-%m-%d %H:%M:%S')
-log = logging.getLogger('XipppyServer') # __name__ is '__main__' when run directly
-log.info('Started XipppyServer.py')
-
-############################ Initialize SS Dict ##############################
-SS = fd.initSS()
 
 ############################## Initialize XippPy #############################
 while True:
@@ -59,29 +30,26 @@ while True:
         pre_time = xp.time()
         time.sleep(0.5)
         if (xp.time()-pre_time)>10000:
-            # SS['logger'].info('xipppy successfully connected... ' + time.strftime('%H%M%S'))
-            log.info('xipppy successfully connected')
+            print('xipppy successfully connected...')
             break
         else:
             xp._close();
     except:
-        # SS['logger'].info('waiting on xipppy... ' + time.strftime('%H%M%S'))
-        log.info('waiting on xipppy...')
+        print('waiting on xipppy...')
         time.sleep(0.5)
 
-# disable stim
-xp.stim_enable_set(False); time.sleep(0.1)
 
-# Check for port D
+############################ Initialize SS Dict ##############################
+xp.stim_enable_set(False); time.sleep(0.1)
+SS = fd.initSS()
 SS['avail_chans'] = np.array(xp.list_elec(fe_type='all',max_elecs=1000))
 if SS['all_EMG_chans'][0] not in SS['avail_chans']:
-    # SS['logger'].info('No EMG detected in Port D')
-    log.info('No EMG detected in Port D')
+    print('No EMG detected in Port D')
 
 
 ######################### Create eventparams file ############################
 timestr = time.strftime('%Y%m%d-%H%M%S')
-SS['eventparams_fid'] = open(RootDir + r'/eventparams/eventparams' + 
+SS['eventparams_fid'] = open(RootDir + r'/eventparams/eventparams' +
                              timestr + r'.ep', 'w')
 
 
@@ -90,18 +58,16 @@ try:
     usb_id = subprocess.check_output(['dmesg'])
     usb_id = re.findall('ch341-uart converter now attached to ttyUSB\d',str(usb_id))
     usb_id = re.search('ttyUSB\d',usb_id[-1])
-    
+
     SS['VT_ard'] = serial.Serial('/dev/' + usb_id.group(0))
     SS['VT_ard'].baudrate = 250000
-    # SS['logger'].info('Vibrotactile arduino connected ' + time.strftime('%H%M%S'))
-    log.info('Vibrotactile arduino connected')
+    print('Vibrotactile arduino connected')
 except:
-    # SS['logger'].info('Vibrotactile arduino failed to connect... ' + time.strftime('%H%M%S'))
-    log.info('Vibrotactile arduino failed to connect...')
+    print('Vibrotactile arduino failed to connect...')
 
 
-    
-    
+
+
 ####### set filters for lfp (only need 1st channel of each frontend) #########
 chan = int(SS['all_EMG_chans'][0])
 xp.signal_set(chan, 'raw'      , False)#; time.sleep(0.1)
@@ -115,8 +81,7 @@ for chan in SS['all_EMG_chans']:
         xp.signal_set(int(chan), 'spk', False)#; time.sleep(0.1) #spk must be set for each channel
         #xp.signal_set(int(chan), 'stim', False) # do we want to turn this off? TNT 5/13/22
     else:
-        # SS['logger'].info('No EMG detected in Port D... ' + time.strftime('%H%M%S'))
-        log.info('No EMG detected in Port D...')
+        print('No EMG detected in Port D')
 
 ################# Try to turn off streams we don't need ######################
 for chan in SS['neural_FE_idx']:
@@ -130,43 +95,36 @@ for chan in SS['all_neural_chans']:
         try:
             xp.signal_set(int(chan), 'stim', True)#; time.sleep(0.1)
         except:
-            # SS['logger'].info('Not a +stim front end. Chan:', chan) # bug: no %s, chan was swallowed
-            log.info('Not a +stim front end. Chan: %s', chan)
-    
+            print('Not a +stim front end. Chan:', chan)
+
 ########################### enable stim ######################################
 xp.stim_enable_set(True)#; time.sleep(0.1)
 time.sleep(0.1)
-while not xp.stim_enable(): # returns true if stim was enabled correctly
-    # SS['logger'].info('Stim not correctly enabled in initialization... ' + time.strftime('%H%M%S'))
-    log.info('Stim not correctly enabled in initialization...')
-    xp.stim_enable_set(True)
-    time.sleep(0.5)
-
-# SS['logger'].info('Stimulation correctly initialized... ' + time.strftime('%H%M%S'))
-log.info('Stimulation correctly initialized...')
+if not xp.stim_enable(): # returns true if stim was enabled correctly
+    print('Stim not correctly enabled in initialization')
 if sum(np.in1d(np.arange(6), SS['avail_chans'])) == 0: # if we don't have electrical stim channels
     SS['avail_chans'] = np.hstack((SS['avail_chans'], np.arange(6))) # add VTstim channels
 
 
-    
+
 ########## socket for continuously communicating with matlab gui #############
 mat_cont_udp = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-mat_cont_udp.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) 
+mat_cont_udp.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 mat_cont_udp.bind((ServerAddr, 20001)) # listen for gui comms on 20001
 # mat_cont_udp.setblocking(0) # sending to matlab through 20002
 
 mat_cont_udp_wifi = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-mat_cont_udp_wifi.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) 
+mat_cont_udp_wifi.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 mat_cont_udp_wifi.bind((ServerAddrWifi, 20001)) # listen for gui comms on 20001
 
 ########## socket for event communication with matlab gui ####################
 mat_evnt_udp = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-mat_evnt_udp.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) 
+mat_evnt_udp.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 mat_evnt_udp.bind((ServerAddr, 20005)) # listen for gui comms on 20005
 # mat_evnt_udp.setblocking(0) # sending to matlab through 20006
 
 mat_evnt_udp_wifi = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-mat_evnt_udp_wifi.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1) 
+mat_evnt_udp_wifi.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 mat_evnt_udp_wifi.bind((ServerAddrWifi, 20005)) # listen for gui comms on 20005
 
 ########### socket for communicating with deka_test_class.py ##################
@@ -181,7 +139,7 @@ UDPEvnt = [mat_evnt_udp,mat_evnt_udp_wifi]
 
 ##### send zero values to hand to reset it to rest position (takes ~2sec) ####
 for i in range(60):
-    pdata_deka = struct.pack('<7f',*np.hstack((SS['kin'][:6].flatten(),1))) # last term is velocity (0) or position (1) wrist 
+    pdata_deka = struct.pack('<7f',*np.hstack((SS['kin'][:6].flatten(),1))) # last term is velocity (0) or position (1) wrist
     udp_deka.sendto(pdata_deka,(ServerAddrDEKA,20004))
     time.sleep(0.033)
     raw_DEKA_udp = udp_deka.recv(1024)
@@ -191,13 +149,13 @@ for i in range(60):
 # Always saving Everything You Need!
 if SS['num_EMG_chans'] == 16:
     SS['eyn_fid'] = open(RootDir + r'/cont_EYNs/cont_EYNs_' + timestr + r'.eyn', 'wb') # nomad directory
-    
+
 elif SS['num_EMG_chans'] == 32:
     SS['eyn_fid'] = open(RootDir + r'/cont_EYNs32/cont_EYNs32_' + timestr + r'.eyn', 'wb') # nomad directory
 # Write header containg shapes of data to be saved
-header = np.r_[np.size(SS['cur_time']), 
-               SS['feat'].size, 
-               SS['xhat'].size, 
+header = np.r_[np.size(SS['cur_time']),
+               SS['feat'].size,
+               SS['xhat'].size,
                SS['cur_sensors'].size,
                SS['stim_freq_save'].size,
                SS['stim_amp_save'].size].astype('single')
@@ -219,6 +177,20 @@ SS = fd.load_bad_elecs(SS, RootDir)
 
 ########### Load most recent decode overrides (locked DOFs, etc) #############
 SS = fd.load_decode_overrides(SS, RootDir)
+
+###################### Load LSTM model if LSTM is true ######################
+SS["LSTM"] = True
+
+# Keep this True because the controller expects commands from -1 to +1.
+SS["lstm_clip_output"] = True
+SS["lstm_model_path"] = "/usr/rppl/TNT4_model_float32.tflite"
+if SS["LSTM"]:
+    SS['num_features'] = int(496)
+    SS = fd.init_lstm_tflite(
+        SS,
+        model_path=SS["lstm_model_path"],
+        num_threads=1
+    )
 
 
 ###### flush deka_server buffer to prevent any delays with transmission ######
@@ -255,60 +227,59 @@ SS['eventparams_fid'].write(fd.SS_to_string(SS) + '\n')
 ##############################################################################
 ########################## Loop starts here ##################################
 ##############################################################################
-
-# SS['logger'].info('Entering run time loop... ' + time.strftime('%H%M%S'))
-log.info('Entering run time loop...')
-
 while True:
     # begLoop = time.time()
     ############### DO NOT PLACE CODE ABOVE THIS #############################
     ####### calc curTime/preTime/elapsedTime and get new EMG #################
     SS = fd.get_features(SS) # this returns diff pairs
-    
-    # getFeat = time.time()
-    #################### start mimicry training ##############################
-    if SS['train_iter'] is not None:
-        SS = fd.mimic_training(SS, UDPCont)
-        
-        
-    ############## load kdf file and train kalman parameters #################
-    SS = fd.load_train_Kalman(SS, RootDir, UDPEvnt, ClientAddrList) # sends event to GUI when training complete
-           
+    if SS['LSTM']:
 
-    ######################### Kalman prediction ##############################
-    SS = fd.kf_test_cob(SS) # modifies xhat_raw and should not be changed hereafter
-    
-    
-    ############################ Threshold ###################################
-    SS = fd.decode_threshold(SS) # modifies xhat
+        SS = fd.lstm_test_cob(SS)
 
-    
+    else:
+
+        # getFeat = time.time()
+        #################### start mimicry training ##############################
+        if SS['train_iter'] is not None:
+            SS = fd.mimic_training(SS, UDPCont)
+
+
+        ############## load kdf file and train kalman parameters #################
+        SS = fd.load_train_Kalman(SS, RootDir, UDPEvnt, ClientAddrList) # sends event to GUI when training complete
+
+
+        ######################### Kalman prediction ##############################
+        SS = fd.kf_test_cob(SS) # modifies xhat_raw and should not be changed hereafter
+
+
+        ############################ Threshold ###################################
+        SS = fd.decode_threshold(SS) # modifies xhat
+
     ########################### latch filter #################################
-    SS = fd.latching_filter(SS) # modifies xhat and xhat_prev  
-    
-    
+    SS = fd.latching_filter(SS) # modifies xhat and xhat_prev
+
     ############################ locked DOFs #################################
     SS = fd.lock_DOFs(SS) # modifies xhat
-    
-    
+
+
     ######################## Tie DOFs together ###############################
     SS = fd.tie_DOFs(SS) # modified xhat
-    
+
     # getDecode = time.time()
     ############# send to/receive from DekaControl() from deka_control_class.py ###########
     if SS['train_iter'] is not None: # if doing mimic training, send kinematics to deka
-        pdata_deka = struct.pack('<7f',*np.hstack((SS['kin'][:6].flatten(),1))) # last term is velocity (0) or position (1) wrist 
+        pdata_deka = struct.pack('<7f',*np.hstack((SS['kin'][:6].flatten(),1))) # last term is velocity (0) or position (1) wrist
     else: # send decode values
         if SS['stop_hand']:
-            pdata_deka = struct.pack('<7f',*np.hstack((np.zeros(6).flatten(),1)))    
+            pdata_deka = struct.pack('<7f',*np.hstack((np.zeros(6).flatten(),1)))
             # print("sending zeros")
         else:
             pdata_deka = struct.pack('<7f',*np.hstack((SS['xhat'][:6].flatten(),SS['wrist_mode'])))
             # print("sending xhat")
-    
+
     udp_deka.sendto(pdata_deka,(ServerAddrDEKA,20004))
-    
-    
+
+
     SS['past_sensors'][:,1:5] = SS['past_sensors'][:,0:4]
     SS['past_sensors'][:,0] = SS['cur_sensors']
     try: #unpack sensor values from Deka since we just asked for a message
@@ -324,12 +295,12 @@ while True:
         SS['stim_amp_save'] = np.zeros(SS['stim_amp_save'].size) # save stim amp for three USEAs
     else:
         SS = fd.stim_engine(SS)
-        
-            
+
+
     #### Save .eyn data right after unpack (13-18 are position sensors) ######
-    SS['eyn_fid'].write(np.r_[SS['cur_time'], 
-                              SS['feat'], 
-                              SS['xhat'].flatten(), 
+    SS['eyn_fid'].write(np.r_[SS['cur_time'],
+                              SS['feat'],
+                              SS['xhat'].flatten(),
                               SS['cur_sensors'],
                               SS['stim_freq_save'],
                               SS['stim_amp_save']].astype('single'))
@@ -341,7 +312,7 @@ while True:
         zeropad = SS['num_features'] - SS['sel_feat_idx'].size
         pdata = struct.pack('<81f',*np.hstack((SS['elapsed_time'],
                                                SS['calc_time'],
-                                               SS['feat'][SS['sel_feat_idx']],
+                                               SS['feat'][0:48],
                                                np.zeros(zeropad),
                                                SS['kin'][:6],
                                                SS['xhat'][:6].flatten(),
@@ -350,37 +321,37 @@ while True:
         # print(SS['calc_time'], '276 - calc', SS['elapsed_time'], '276 - elapsed')
         pdata = struct.pack('<81f',*np.hstack((SS['elapsed_time'],
                                                SS['calc_time'],
-                                               SS['feat'][SS['sel_feat_idx']],
+                                               SS['feat'][0:48],
                                                SS['kin'][:6],
                                                SS['xhat'][:6].flatten(),
                                                SS['cur_sensors'])))
 
-    
+
     readable, writable, exceptional = select.select(UDPCont, UDPCont, UDPCont)
     for u in writable:
         if u is UDPCont[0]: #lan
             u.sendto(pdata,(ClientAddrList[0],20002))
         elif u is UDPCont[1]: #wifi
             u.sendto(pdata,(ClientAddrList[1],20002))
-    
-    
+
+
     ################### read from XipppyClientGUI ############################
     data = ['']
     readable, writable, exceptional = select.select(UDPEvnt, UDPEvnt, UDPEvnt)
     for u in readable:
         data = u.recv(1024).decode('UTF-8')
-        SS['eventparams_fid'].write(data + "; SS['cur_time'] = " + 
+        SS['eventparams_fid'].write(data + "; SS['cur_time'] = " +
                                     str(SS['cur_time']) + ';\n')
         data = data.split(':',1)
-        SS['logger'].info(data)
-    
-    
+        print(data)
+
+
     ######################## GUI event parsing ###############################
     if data[0] == 'close': # break out of the loop
         break
     SS = fd.guiCOMM(SS, data, RootDir, UDPEvnt, ClientAddrList)
-    
-    
+
+
 
     ############### Find calculation time and sleep ##########################
     SS['calc_time'] = np.single((xp.time()-SS['cur_time'])/30)
@@ -401,4 +372,3 @@ SS['eventparams_fid'].close()
 SS['eyn_fid'].close()
 if SS['VT_ard'] is not None:
     SS['VT_ard'].close()
-

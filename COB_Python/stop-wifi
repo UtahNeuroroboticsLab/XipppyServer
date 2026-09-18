@@ -1,0 +1,6 @@
+#!/bin/bash
+# This will be a litte easier under pressure.
+export PATH=$PATH:/usr/rppl:/usr/sbin:/usr/local/bin
+service hostapd stop
+service udhcpd stop
+setled -w off
