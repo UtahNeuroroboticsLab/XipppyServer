@@ -4,16 +4,19 @@
 #   docker run --rm -v "${PWD}:/app" xippy-test
 FROM --platform=linux/386 python:3.7-slim
 
-# numpy pinned: last series with 32-bit linux wheels for cp37. Unpinned, pip
-# tries to build from source and slim has no compiler.
-RUN pip install --no-cache-dir "numpy==1.21.6" pyserial can4python
+RUN pip install --no-cache-dir \
+    "numpy==1.21.6" \
+    pyserial \
+    can4python
 
 COPY xipppy/xipppy-0.16.2-cp37-cp37m-linux_i686.whl /tmp/
-RUN pip install --no-cache-dir /tmp/xipppy-0.16.2-cp37-cp37m-linux_i686.whl
+COPY tflite_runtime-2.5.0-cp37-cp37m-linux_i686.whl /tmp/
 
-# storage root exists, logs/ deliberately does not - exercises the makedirs branch
-RUN mkdir -p /var/rppl/storage
-RUN mkdir -p /usr/rppl
+RUN pip install --no-cache-dir \
+    /tmp/xipppy-0.16.2-cp37-cp37m-linux_i686.whl \
+    /tmp/tflite_runtime-2.5.0-cp37-cp37m-linux_i686.whl
+
+RUN mkdir -p /var/rppl/storage /usr/rppl
 
 WORKDIR /app
 CMD ["sh", "test/run_test.sh"]
