@@ -3,7 +3,6 @@ import feedbackdecode as fd
 # import multiprocessing as mp
 import serial # pySerial for vibrotactile stim
 import re # used to search for attached usb devices
-import os
 import socket
 import struct
 import subprocess
@@ -31,9 +30,6 @@ SS = fd.initSS()
 # Configure once, here at the entrypoint. Every other module just does
 # `log = logging.getLogger(__name__)` so records name whoever emitted them.
 LOG_PATH = RootDir + r'/logs/XipppyServerLog.log'
-if not os.path.isdir(RootDir):
-    raise RuntimeError(RootDir + ' not found - is this running on the Nomad?')
-os.makedirs(RootDir + r'/logs', exist_ok=True)
 
 # log is opened append-mode, so banner each restart to keep sessions separable
 with open(LOG_PATH, 'a') as f:
