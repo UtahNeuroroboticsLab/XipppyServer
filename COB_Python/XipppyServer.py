@@ -3,6 +3,7 @@ import feedbackdecode as fd
 # import multiprocessing as mp
 import serial # pySerial for vibrotactile stim
 import re # used to search for attached usb devices
+import os
 import socket
 import struct
 import subprocess
@@ -33,6 +34,8 @@ LOG_PATH = RootDir + r'/logs/XipppyServerLog.log'
 
 from pathlib import Path
 
+if not os.path.isdir(RootDir):
+    raise RuntimeError(RootDir + ' not found - is this running on the Nomad or proper test environment?')
 Path(LOG_PATH).parent.mkdir(parents=True, exist_ok=True)
 
 # log is opened append-mode, so banner each restart to keep sessions separable
