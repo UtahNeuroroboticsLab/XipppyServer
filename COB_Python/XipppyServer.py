@@ -31,6 +31,10 @@ SS = fd.initSS()
 # `log = logging.getLogger(__name__)` so records name whoever emitted them.
 LOG_PATH = RootDir + r'/logs/XipppyServerLog.log'
 
+from pathlib import Path
+
+Path(LOG_PATH).parent.mkdir(parents=True, exist_ok=True)
+
 # log is opened append-mode, so banner each restart to keep sessions separable
 with open(LOG_PATH, 'a') as f:
     f.write('\n' + '#'*78 + '\n'

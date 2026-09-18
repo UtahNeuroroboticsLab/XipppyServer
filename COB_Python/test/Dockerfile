@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir \
     /tmp/tflite_runtime-2.5.0-cp37-cp37m-linux_i686.whl
 
 RUN mkdir -p /var/rppl/storage /usr/rppl
+RUN mkdir -p /var/rppl/storage/logs
 
 WORKDIR /app
 CMD ["sh", "test/run_test.sh"]
