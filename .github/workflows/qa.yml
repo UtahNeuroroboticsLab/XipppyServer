@@ -1,0 +1,30 @@
+name: QA
+
+on:
+  push:
+    paths:
+      - 'COB_Python/**'
+      - '.github/workflows/qa.yml'
+  pull_request:
+    paths:
+      - 'COB_Python/**'
+      - '.github/workflows/qa.yml'
+  workflow_dispatch:
+
+jobs:
+  logging:
+    name: XipppyServer logging (i686 / py3.7)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # i686 + CPython 3.7, matching the Nomad's cp37-cp37m-linux_i686 wheels.
+      # No qemu needed: amd64 hosts run linux/386 natively.
+      - name: Build test image
+        working-directory: COB_Python
+        run: docker build --platform linux/386 -f test/Dockerfile -t xippy-test .
+
+      # Runs the real XipppyServer.py until it blocks in the xipppy retry loop,
+      # then asserts on the log it wrote. Prints the log either way.
+      - name: Run logging test
+        run: docker run --rm -v "${{ github.workspace }}/COB_Python:/app" xippy-test
